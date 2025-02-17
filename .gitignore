@@ -1,0 +1,10 @@
+/tvenv
+.env
+*.log
+*.pot
+*.pyc
+__pycache__/
+*.sqlite3
+staticfiles/
+static/
+media/
