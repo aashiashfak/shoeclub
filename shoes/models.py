@@ -38,8 +38,13 @@ class ProductImage(models.Model):
     )
     image = CloudinaryField("image", folder="shoe_images/")
     is_main = models.BooleanField(default=False)  
+
+    @property
+    def image_url(self):
+        return self.image.url if self.image else "No image"
+
     def __str__(self):
-        return f"Image for {self.shoe_product.name}"
+        return f"Image for {self.product.name}"
 
     class Meta:
         constraints = [
@@ -49,4 +54,3 @@ class ProductImage(models.Model):
                 name="unique_main_image",
             )
         ]
-
