@@ -15,7 +15,7 @@ class TimeStampedModel(models.Model):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     ROLE_CHOICES = [
-        ("Hospital", "Hospital Admin"),
+        ("User", "User"),
         ("Admin", "Main Administator"),
     ]
     username = models.CharField(max_length=25, default="guest")
