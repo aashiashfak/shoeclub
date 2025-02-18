@@ -11,12 +11,19 @@ class Category(TimeStampedModel, models.Model):
 
 
 class Product(TimeStampedModel, models.Model):
+    DESIGN_CHOICES = [
+        ("basic", "Basic Design"),
+        ("basic-1", "Basic Design 1"),
+    ]
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     is_active = models.BooleanField(default=True)
     category = models.ForeignKey(
         Category, related_name="products", on_delete=models.PROTECT
+    )
+    design_type = models.CharField(
+        max_length=10, choices=DESIGN_CHOICES, default="basic"
     )
 
     def __str__(self):
@@ -27,6 +34,7 @@ class ProductSize(TimeStampedModel, models.Model):
     product = models.ForeignKey(Product, related_name="sizes", on_delete=models.CASCADE)
     size = models.CharField(max_length=8)
     quantity = models.PositiveIntegerField()
+    
 
     def __str__(self):
         return f"Size {self.size} - {self.quantity} in stock"

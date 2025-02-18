@@ -2,8 +2,15 @@ from rest_framework import serializers
 from .models import *
 from django.db import transaction
 
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = "__all__"
+
+
 class ProductImageSerializer(serializers.ModelSerializer):
-    image_url = serializers.CharField(source="image.url", required=False)  
+    image_url = serializers.CharField(source="image.url", required=False)
 
     class Meta:
         model = ProductImage
@@ -17,13 +24,28 @@ class ProductSizeSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    images = ProductImageSerializer(many=True,)
-    sizes = ProductSizeSerializer(many=True, )
-    category = serializers.CharField(source="category.name", )
+    images = ProductImageSerializer(
+        many=True,
+    )
+    sizes = ProductSizeSerializer(
+        many=True,
+    )
+    category = serializers.CharField(
+        source="category.name",
+    )
 
     class Meta:
         model = Product
-        fields = ["id", "name", "description", "price", "category", "images", "sizes"]
+        fields = [
+            "id",
+            "name",
+            "design_type",
+            "description",
+            "price",
+            "category",
+            "images",
+            "sizes",
+        ]
 
     def create(self, validated_data):
         images_data = validated_data.pop("images", [])

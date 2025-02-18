@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # myapps
     "accounts",
     "shoes",
+    "custom_admin",
     # thirdparty
     "rest_framework",
     "cloudinary",
