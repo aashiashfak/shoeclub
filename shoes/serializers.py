@@ -30,15 +30,9 @@ class ProductSizeSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    images = ProductImageSerializer(
-        many=True,
-    )
-    sizes = ProductSizeSerializer(
-        many=True,
-    )
-    category = serializers.CharField(
-        source="category.name",
-    )
+    images = ProductImageSerializer(many=True, required=False)
+    sizes = ProductSizeSerializer(many=True, required=False)
+    category = serializers.CharField(source="category.name", required=False)
 
     class Meta:
         model = Product
@@ -64,7 +58,7 @@ class ProductSerializer(serializers.ModelSerializer):
                 category, _ = Category.objects.get_or_create(name=category_name)
 
                 product = Product.objects.create(category=category, **validated_data)
-
+                
                 for image_data in images_data:
                     ProductImage.objects.create(product=product, **image_data)
 

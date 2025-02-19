@@ -39,7 +39,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     """
 
     queryset = Product.objects.select_related("category").all()
-    serializer_class = ProductViewSetSerializer
+    serializer_class = ProductSerializer
     permission_classes = [IsAdminOrReadOnly]
 
 
