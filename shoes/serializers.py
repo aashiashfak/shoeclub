@@ -9,6 +9,12 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ProductViewSetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = "__all__"
+
+
 class ProductImageSerializer(serializers.ModelSerializer):
     image_url = serializers.CharField(source="image.url", required=False)
 
@@ -20,7 +26,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
 class ProductSizeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductSize
-        fields = ["size", "quantity"]
+        fields = ["id", "size", "quantity"]
 
 
 class ProductSerializer(serializers.ModelSerializer):
