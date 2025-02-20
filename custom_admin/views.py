@@ -35,10 +35,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
-    ViewSet for managing Product CRUD operations.
+    ViewSet for managing ProductSize CRUD operations.
     """
 
-    queryset = Product.objects.select_related("category").all()
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAdminOrReadOnly]
 
@@ -52,10 +52,12 @@ class ProductSizeViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSizeSerializer
     permission_classes = [IsAdminOrReadOnly]
 
+
 class ProductImageViewSet(viewsets.ModelViewSet):
     """
     ViewSet for managing ProductImage CRUD operations.
     """
+
     queryset = ProductImage.objects.all()
-    serializer_class = ProductImageSerializer   
+    serializer_class = ProductImageSerializer
     permission_classes = [IsAdminOrReadOnly]

@@ -7,4 +7,6 @@ urlpatterns = [
     path("verify-otp/", UserLoginVerifyAPIView.as_view(), name="verify_otp"),
     path("sign-up/", UserSignUpRequestView.as_view(), name="user_sign_up"),
     path("sign-up/verify-otp/", UserSignUpVerifyView.as_view(), name="sign_up_verify_otp"),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
 ]

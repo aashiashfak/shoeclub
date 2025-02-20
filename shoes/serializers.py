@@ -16,11 +16,11 @@ class ProductViewSetSerializer(serializers.ModelSerializer):
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
-    image_url = serializers.CharField(source="image.url", required=False)
+    image = serializers.ImageField(use_url=True, required=True)
 
     class Meta:
         model = ProductImage
-        fields = ["id", "image_url", "is_main"]
+        fields = ["id", "image", "is_main"]
 
 
 class ProductSizeSerializer(serializers.ModelSerializer):
@@ -48,6 +48,8 @@ class ProductSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
+        print('validated_data', validated_data, end=" ")
+        
         images_data = validated_data.pop("images", [])
         sizes_data = validated_data.pop("sizes", [])
         category_data = validated_data.pop("category")
@@ -58,7 +60,7 @@ class ProductSerializer(serializers.ModelSerializer):
                 category, _ = Category.objects.get_or_create(name=category_name)
 
                 product = Product.objects.create(category=category, **validated_data)
-                
+
                 for image_data in images_data:
                     ProductImage.objects.create(product=product, **image_data)
 

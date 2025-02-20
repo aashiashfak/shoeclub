@@ -7,6 +7,7 @@ from .permissions import IsAdminOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from .filters import ProductFilter
 from .pagination import ProductPagination
+from .utils import restructure_product_creation_data
 
 
 class ProductListCreateView(generics.ListCreateAPIView):
@@ -29,6 +30,16 @@ class ProductListCreateView(generics.ListCreateAPIView):
         "description",
         "category__name",
     ]
+
+    def post(self, request, *args, **kwargs):
+        print("Entered in post method")
+        product_data = restructure_product_creation_data(request.data)
+        print("Product Data: ", product_data)
+        serializer = self.get_serializer(data=product_data)
+        serializer.is_valid(raise_exception=True)
+        product = serializer.save()
+
+        return Response(ProductSerializer(product).data, status=201)
 
 
 class ProductDetailView(generics.RetrieveAPIView):

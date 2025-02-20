@@ -8,6 +8,7 @@ from .models import CustomUser
 from django.conf import settings
 from upstash_redis import Redis
 from decouple import config
+from rest_framework_simplejwt.views import TokenRefreshView
 
 redis = Redis(
     url="https://accepted-mantis-42257.upstash.io",
@@ -158,7 +159,7 @@ class UserSignUpVerifyView(APIView):
     If the OTP matches the stored value and no user with the given email exists, 
     a new user is created, and a JWT access token is generated and returned in the response.
     """
-    
+
     def post(self, request):
         print("user_data", request.data)
         serializer = UserAuthSerializer(data=request.data)
@@ -214,4 +215,37 @@ class UserSignUpVerifyView(APIView):
             max_age=int(refresh_token_expiry.total_seconds()),
         )
 
+        return response
+
+
+class CustomTokenRefreshView(TokenRefreshView):
+    """
+    Custom TokenRefreshView that checks for refresh_token in cookies.
+    """
+
+    def post(self, request, *args, **kwargs):
+
+        refresh_token = request.COOKIES.get("refresh")
+
+        if not refresh_token:
+            return Response(
+                {"detail": "Refresh token not provided."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        request.data["refresh"] = refresh_token
+
+        return super().post(request, *args, **kwargs)
+
+
+class LogoutView(APIView):
+    """
+    API View for logging out the user by deleting the refresh token cookie.
+    """
+
+    def post(self, request):
+        response = Response(
+            {"detail": "Logged out successfully."}, status=status.HTTP_200_OK
+        )
+        response.delete_cookie("refresh")  
         return response
