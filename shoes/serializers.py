@@ -49,7 +49,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         print('validated_data', validated_data, end=" ")
-        
+
         images_data = validated_data.pop("images", [])
         sizes_data = validated_data.pop("sizes", [])
         category_data = validated_data.pop("category")
@@ -76,3 +76,17 @@ class ProductSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"error": "Product creation failed", "details": str(e)}
             )
+
+    def update(self, instance, validated_data):
+        category_data = validated_data.pop("category", None)  
+        if category_data:
+            category_name = category_data.get("name")
+            if category_name:
+                category, _ = Category.objects.get_or_create(name=category_name)
+                instance.category = category  
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
