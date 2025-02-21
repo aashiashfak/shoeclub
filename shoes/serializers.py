@@ -16,7 +16,7 @@ class ProductViewSetSerializer(serializers.ModelSerializer):
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(use_url=True, required=True)
+    image = serializers.ImageField(use_url=True, required=False)
 
     class Meta:
         model = ProductImage
