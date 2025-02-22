@@ -42,7 +42,10 @@ class ProductViewSet(viewsets.ModelViewSet):
     ViewSet for managing ProductSize CRUD operations.
     """
 
-    queryset = Product.objects.all()
+    def get_queryset(self):
+        return Product.objects.select_related("category").prefetch_related(
+            "sizes", "images"
+        )
     serializer_class = ProductSerializer
     permission_classes = [IsAdminOrReadOnly]
 
