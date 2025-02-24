@@ -30,6 +30,15 @@ class UserLoginRequestAPIView(APIView):
             cache_key = f"otp_{email}"
             existing_otp = redis.get(cache_key)
 
+            try:
+                user = CustomUser.objects.get(email=email)
+            except CustomUser.DoesNotExist:
+                redis.delete(cache_key)
+                return Response(
+                    {"error": "User does not exist. pls signUp"},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
             if not existing_otp:
                 otp = generate_otp()
                 redis.set(cache_key, otp, ex=120)
@@ -155,8 +164,8 @@ class UserSignUpRequestView(APIView):
 
 class UserSignUpVerifyView(APIView):
     """
-    Verifies the OTP entered by the user during signup. 
-    If the OTP matches the stored value and no user with the given email exists, 
+    Verifies the OTP entered by the user during signup.
+    If the OTP matches the stored value and no user with the given email exists,
     a new user is created, and a JWT access token is generated and returned in the response.
     """
 
@@ -247,5 +256,5 @@ class LogoutView(APIView):
         response = Response(
             {"detail": "Logged out successfully."}, status=status.HTTP_200_OK
         )
-        response.delete_cookie("refresh")  
+        response.delete_cookie("refresh")
         return response
