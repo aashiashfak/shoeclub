@@ -110,7 +110,7 @@ class UserLoginVerifyAPIView(APIView):
                     key="refresh",
                     value=tokens["refresh"],
                     httponly=True,
-                    secure=False,
+                    secure=settings.DEBUG,
                     samesite="Lax",
                     max_age=int(refresh_token_expiry.total_seconds()),
                 )
@@ -219,7 +219,7 @@ class UserSignUpVerifyView(APIView):
             key="refresh",
             value=tokens["refresh"],
             httponly=True,
-            secure=False,
+            secure=settings.DEBUG,
             samesite="Lax",
             max_age=int(refresh_token_expiry.total_seconds()),
         )
