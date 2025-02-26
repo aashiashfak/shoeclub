@@ -103,7 +103,7 @@ class ProductImageListCreateView(generics.ListCreateAPIView):
     """
 
     serializer_class = ProductImageSerializer
-    # permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly]
 
     def get_queryset(self):
         """
@@ -124,7 +124,7 @@ class ProductImageListCreateView(generics.ListCreateAPIView):
                     is_main=False
                 )
 
-            serializer.save(product=product)  # Assign product before saving
+            serializer.save(product=product)  
 
 
 class ProductImageDetailView(generics.RetrieveUpdateDestroyAPIView):
