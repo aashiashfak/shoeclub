@@ -30,8 +30,25 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
-CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS = [
+    "shoeclub-frontend.vercel.app",
+    "localhost",
+    "127.0.0.1",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://shoeclub-frontend.vercel.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://shoeclub-frontend.vercel.app",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+
 CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
