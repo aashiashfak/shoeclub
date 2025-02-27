@@ -64,6 +64,8 @@ CORS_ALLOW_HEADERS = [
     "user-agent",
 ]
 CORS_EXPOSE_HEADERS = ["Set-Cookie"]
+SESSION_COOKIE_SECURE = True  
+CSRF_COOKIE_SECURE = True
 
 # Application definition
 
