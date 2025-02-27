@@ -9,6 +9,7 @@ from django.conf import settings
 from upstash_redis import Redis
 from decouple import config
 from rest_framework_simplejwt.views import TokenRefreshView
+import traceback
 
 redis = Redis(
     url="https://accepted-mantis-42257.upstash.io",
@@ -111,7 +112,7 @@ class UserLoginVerifyAPIView(APIView):
                     value=tokens["refresh"],
                     httponly=True,
                     secure=not settings.DEBUG,
-                    samesite=None,
+                    samesite="Lax",
                     max_age=int(refresh_token_expiry.total_seconds()),
                 )
 
@@ -233,18 +234,28 @@ class CustomTokenRefreshView(TokenRefreshView):
     """
 
     def post(self, request, *args, **kwargs):
+        try:
+            refresh_token = request.COOKIES.get("refresh")
 
-        refresh_token = request.COOKIES.get("refresh")
+            if not refresh_token:
+                print("No refresh token provided")
+                return Response(
+                    {"detail": "Refresh token not provided."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
-        if not refresh_token:
+            request.data["refresh"] = refresh_token
+
+            return super().post(request, *args, **kwargs)
+
+        except Exception as e:
+            error_details = traceback.format_exc()  # Get full error traceback
+            print("Exception in Token Refresh:", error_details)  # Log error
+
             return Response(
-                {"detail": "Refresh token not provided."},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"error": str(e), "details": error_details},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
-
-        request.data["refresh"] = refresh_token
-
-        return super().post(request, *args, **kwargs)
 
 
 class LogoutView(APIView):
