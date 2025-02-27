@@ -54,6 +54,17 @@ CSRF_TRUSTED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
+CORS_ALLOW_HEADERS = [
+    "content-type",
+    "authorization",
+    "x-csrftoken",
+    "accept",
+    "accept-encoding",
+    "origin",
+    "user-agent",
+]
+CORS_EXPOSE_HEADERS = ["Set-Cookie"]
+
 # Application definition
 
 INSTALLED_APPS = [
